@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d'); // here we are working with 2d , for video games we use 3d
+   canvas.width = window.innerWidth; // we are setting canvas width and height as big as window is (in body for canvas we set width and height to 800 ,here we are rewriting it)
+   canvas.height = window.innerHeight;
+
+   // ctx is a shorthand for the word "context Of course you can use whatever name you like - there is no real naming convention in this instance.
+   ctx.strokeStyle = '#BADA55'; //declaring the initial color of the line
+   ctx.lineJoin = 'round'; // it should be rounded when joining the lines (look into mdn for different option)
+   ctx.lineCap = 'round'; // it should be rounded while ending the line
+   ctx.lineWidth = 100; // declaring the width of drawing line
+  //  ctx.globalCompositionOperation = 'multiply'; when two lines connect colors blend (we can check in google)
+
+   let isDrawing = false;
+   let lastX = 0; // we need starting and ending x and y while drawing
+   let lastY = 0;
+    // go to mother-heffing hsl website  ,we can programitically select peices of color
+   let hue = 0;
+   let direction = true;
+
+   function draw(e){
+     if(!isDrawing) return; // stop the function from running when they are not moused down
+     console.log(e); // this consoles the information according to drawings
+
+     ctx.strokeStyle = `hsl(${hue}, 100%, 50%)` // hue=0 i.e starting at o red ,100% is saturation 50% is lightness
+    //  ctx.lineWidth = hue;
+     ctx.beginPath(); // start from
+     ctx.moveTo(lastX,lastY); // go to
+     ctx.lineTo(e.offsetX,e.offsetY); // there offset we can see them from console.log(e); these are inner function and variables
+     ctx.stroke(); // without using stroke no moveTo or lineTo won't work
+     [lastX, lastY] = [e.offsetX, e.offsetY]; //(same as below 2 line it is short form called destructiring)
+    //  lastX = e.offsetX; // without rewriting lastX and lastY to offsetX and offsetY evry line starts from x=o to present y (lokks like sun rays)
+    //  lastY = e.offsetY;
+
+     hue++; // this will increments i.e 1st we draw it is 1 second time we draw it is 2 ...colors change
+     if(hue >= 360){ // after 360 , same color will continue so if we want to continue cyle of colors then reset hue to 0 after hue reaches 360.
+       hue = 0;
+     }
+
+     if(ctx.lineWidth >= 100 || ctx.lineWidth <=1){
+       direction = ! direction // if linewidth satisfy the condition we flip the direction
+     }
+     if(direction){
+       ctx.lineWidth++;  // as we draw line width goes bigger
+     }else{
+       ctx.lineWidth--;  // as we draw line width goes smaller
+     }
+
+   }
+
+   canvas.addEventListener('mousedown', (e) => {
+     isDrawing = true
+     [lastX, lastY] = [e.offsetX , e.offsetY];
+   });
+   canvas.addEventListener('mousemove',draw);
+
+   canvas.addEventListener('mouseup',() => isDrawing = false);
+   canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+
+</script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
+
+</body>
+</html>

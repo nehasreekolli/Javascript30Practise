@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+
+    // for debugging open dev tools, then select any element in Elements then right click it ,select break on then select attribute notification that wouls debbug
+    // after debugging take off attribute notification by going to break on and clicking attribute notification
+
+    // Regular
+    console.log(dogs);
+
+    // Interpolated
+    console.log('Hello i am %s sree!','Neha'); // interpolate second one to first one
+
+
+    // Styled
+    console.log('%c I am some great text', 'font-size: 10px; background-color: blue; color: white'); // we can style using %c
+
+    // warning!
+    console.warn('This is wrong!');
+
+    // Error :|
+    console.error('wrong!!');
+
+    // Info
+    console.info('I am intrested in front end development ');
+
+    // Testing
+    console.assert(1===1, 'this is wrong'); // this won't display anything because assert only displays if condition is wrong
+    console.assert(1===2,'this is wrong'); // this gives error as assertion failed: this is wrong
+    const p = document.querySelector('p');
+    console.assert(p.classList.contains('ouch'),'No class of ouch found in p');
+
+
+    // clearing
+    // console.clear(); // if this is not cleared then above consoles can't be veiwed
+
+    // Viewing DOM Elements
+    console.log(p); // this consoles element p ,<p onClick="makeGreen()">×BREAK×DOWN×</p>
+    console.dir(p); // this allows to open ,contains like classList className accaessKey etc
+
+
+    // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`); // this .group displays as two groups snickers and hugo
+      // console.groupCollapsed(`${dog.name}`); // this .gropcollapsed displays as collapsed group instead of opening itself all the information
+      console.log(`this is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age *7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // counting
+    console.count('neha');
+    console.count('sree');
+    console.count('neha');
+    console.count('sree');
+    console.count('neha');
+    console.count('sree');
+    console.count('neha');
+    console.count('sree');
+    console.count('neha');
+    console.count('sree');
+    console.count('sree');
+    console.count('sree');
+    console.count('sree');
+
+    // timing
+    console.time('fetching data');
+    fetch('http://api.github.com/users/wesbos')
+      .then(data => data.json())
+      .then(data =>{
+        console.timeEnd('fetching data');
+        console.log(data);
+      }); // there is also performance.now in browser
+
+    //table
+    console.table(dogs);
+
+  </script>
+</body>
+</html>
