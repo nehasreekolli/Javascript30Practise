@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click and Drag</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="items">
+    <div class="item item1">01</div>
+    <div class="item item2">02</div>
+    <div class="item item3">03</div>
+    <div class="item item4">04</div>
+    <div class="item item5">05</div>
+    <div class="item item6">06</div>
+    <div class="item item7">07</div>
+    <div class="item item8">08</div>
+    <div class="item item9">09</div>
+    <div class="item item10">10</div>
+    <div class="item item11">11</div>
+    <div class="item item12">12</div>
+    <div class="item item13">13</div>
+    <div class="item item14">14</div>
+    <div class="item item15">15</div>
+    <div class="item item16">16</div>
+    <div class="item item17">17</div>
+    <div class="item item18">18</div>
+    <div class="item item19">19</div>
+    <div class="item item20">20</div>
+    <div class="item item21">21</div>
+    <div class="item item22">22</div>
+    <div class="item item23">23</div>
+    <div class="item item24">24</div>
+    <div class="item item25">25</div>
+  </div>
+
+<script>
+  const slider = document.querySelector('.items');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    // console.log(e); //MouseEvent {isTrusted: true, screenX: 505, screenY: 261, clientX: 506, clientY: 163…}
+    // console.log(e.pageX); //440 (it gives exactly where we clicked)
+    startX = e.pageX - slider.offsetLeft; //If there is 50px border between page and our item it will get subtracted(offset) from pageX
+    scrollLeft = slider.scrollLeft;
+    // console.log(startX);//178 (low no when we click at 1 item) //638 (high no when we click at 3rd item)
+  });
+
+  slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+
+  slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+      });
+
+  slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return; //stop the function from running
+      // console.count(isDown); // counts how many times we click
+        //  console.log(isDown); //when clicked isDown is true
+        //  console.log(' mouse moved');// when clicked it consoles
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        // console.log({x, startX}); // we can just console.log(x,startX);
+                                // this gives 277,289 345,289
+                                // when we use object {x, startX} it gives as
+                                // Object {x: 346, startX: 475}
+                                  //  Object {x: 378, startX: 475}
+                                  // Object {x: 400, startX: 475}
+                                  // Object {x: 421, startX: 475}
+                                  // when we start dragging the mouse present x value changes but start value is same ,untill we leave the mouse and start dragging again
+        // const walk = x - startX;
+        const walk = (x - startX) * 3; // when do above line of code without * 3
+        // * 3 is just every pixel we move 3px screen drap will happen .(i.e, change of items)
+        // console.log(walk); // gives how much we moved
+                            // 0 1 2 1 0 -1 -2 -3 ( i dragged cursor from starting 1 item and dragged back there to starting point)
+        // slider.scrollLeft = walk; // we can set like this but when when we drag it is shaky
+        slider.scrollLeft = scrollLeft - walk;
+        });
+
+
+</script>
+
+  </body>
+</html>

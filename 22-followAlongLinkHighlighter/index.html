@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>👀👀👀Follow Along Nav</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Order Status</a></li>
+        <li><a href="">Tweets</a></li>
+        <li><a href="">Read Our History</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul>
+    </nav>
+
+    <div class="wrapper">
+      <p>Lorem ipsum dolor sit amet, <a href="">consectetur</a> adipisicing elit. Est <a href="">explicabo</a> unde natus necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+      <p>Aspernatur sapiente quae sint <a href="">soluta</a> modi, atque praesentium laborum pariatur earum <a href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+      <p>Cum ipsam quod, incidunt sit ex <a href="">tempore</a> placeat maxime <a href="">corrupti</a> possimus <a href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic, <a href="">quibusdam</a>, nulla.</p>
+      <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
+      <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
+    </div>
+
+  <script>
+    // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+
+    const triggers = document.querySelectorAll('a');
+    const highlight = document.createElement('span'); // creating a span element
+    highlight.classList.add('highlight'); // adding highlight class to highlight span element which we created
+    document.body.append(highlight); // appending to DOM
+    // If we inspect after appending we can find highlight element in DOM
+
+    function highlightLink(){
+      // console.log('highlight'); (consoles highlight wheneven we mouse move on a (triggers))
+      // console.log(this); // consoles which element is triggered (<a href>Tweets</a>)
+      const linkCoords = this.getBoundingClientRect(); // getting coordinates of triggered event
+      console.log(linkCoords); // consoling the coordinates (ClientRect {top: 100, right: 512.765625, bottom: 128, left: 379.171875, width: 133.59375…})
+
+      // comment below coords and change highlight.style.transform = `translate(${linkCoords.left}px, ${linkCoords.top}px)`;
+      // then open console type scrollY it gives 0 at top of page.
+      // scroll the page and type scrollY it gives different value (4,67,80..) because coordinates changes
+      // when we hover on link it worn't work correctly
+      //so ,here we are designing our own coordinates naming as coords
+      const coords = {
+        width: linkCoords.width, // width and height are same .there is no effect
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY, // we adjusting position related to scroll positions of x and y
+        left: linkCoords.left + window.scrollX
+      };
+      // Now taking these width,height and values we can style
+      highlight.style.width = `${linkCoords.width}px`; // here we making highlight of each a when mouse over to same width and height of slected a
+      highlight.style.height = `${linkCoords.height}px`;
+      // now we are doing for left and right i.e exactly highlight where we mouse over (a)
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+    }
+
+    triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+    // lisening mouseenter event on all triggers and adding event listener function highlightLink
+
+  </script>
+</body>
+</html>

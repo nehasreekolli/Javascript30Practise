@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Synthesis</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="voiceinator">
+
+      <h1>The Voiceinator 5000</h1>
+
+      <select name="voice" id="voices">
+        <option value="">Select A Voice</option>
+      </select>
+
+      <label for="rate">Rate:</label>
+      <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+
+      <label for="pitch">Pitch:</label>
+
+      <input name="pitch" type="range" min="0" max="2" step="0.1">
+      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+      <button id="stop">Stop!</button>
+      <button id="speak">Speak</button>
+
+    </div>
+
+<script>
+  const msg = new SpeechSynthesisUtterance();
+  let voices = [];
+  const voicesDropdown = document.querySelector('[name="voice"]');
+  const options = document.querySelectorAll('[type="range"], [name="text"]');
+  const speakButton = document.querySelector('#speak');
+  const stopButton = document.querySelector('#stop');
+  msg.text = document.querySelector('[name="text"]').value; // msg gives string(words) in text area
+
+function populateVoices(){
+  voices = this.getVoices(); // overwrite voices
+  // console.log(voices); // consoles all voices that are default by system
+  //lot of voices appear when we open we can find (eg: lang:"en-US" name:"alex" etc...)
+  // now want to take all there voices and loop over to include as options in select(Select A Voice)
+  voicesDropdown.innerHTML = voices
+                        // .filter(voice => voice.lang.includes('en')) //it trims voice options that onlu have lang en
+                        .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+                        .join('');
+}
+
+// making voices play
+function setVoice(){
+  // console.log('changing voice'); // consoles when we change voice option
+  // console.log('this.value'); // consoles which voice name is selected
+  msg.voice = voices.find(voice => voice.name === this.value);
+  toggle();
+}
+
+function toggle(startOver = true){ // no need of usage of startOver just for clear understanding
+  speechSynthesis.cancel();
+  if(startOver){
+  speechSynthesis.speak(msg);
+ }
+}
+
+function setOption(){
+  console.log(this.name, this.value); // by this what property changed and at what value it changed (rate,pitch)
+  msg[this.name] = this.value;
+  toggle();
+}
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices); // adding event populateVoices when voiceschanged is triggered
+  voicesDropdown.addEventListener('change',setVoice); //when change event is triggered on voiceDropdown then setVoice is called
+  options.forEach(option => option.addEventListener('change', setOption));
+  speakButton.addEventListener('click',toggle);
+  stopButton.addEventListener('click',() => toggle(false)); // we can't call toogle(false so we have to use function(){toggle(false)} or toggle.bind(null, false) or () => toggle(false)
+
+
+</script>
+
+</body>
+</html>
