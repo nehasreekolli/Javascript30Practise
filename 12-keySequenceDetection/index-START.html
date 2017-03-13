@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  const pressed =[];
+  const secretCode = 'wesbos' ;
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key); // this would tell us which key is pressed
+    pressed.push(e.key); // we are pushing typed keys to array pressed
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length); // here, we are splicing from end i.e, our selected secretCode length is 6 so, if we enter any letter more than 6 then first letter from array is pushed off and new letetr is added so that every time we have 6 letters in array pressed
+    if(pressed.join('').includes(secretCode)){  // here pressed.join is for converting pressed letters to string eg:a,s,d,f,g,f is typed it converts into "asdfgf"
+      console.log("ding ding"); // is logged when our join word has secretCode i.e, wesbos
+      cornify_add(); // cornify is javascript and there is function called cornify_add, we running cornify_add when our joined word is wesbos; (just a fun stuff)
+    }
+
+    console.log(pressed); // we are logging the pressed array
+
+  });
+</script>
+</body>
+</html>

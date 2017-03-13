@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Speed Scrubber</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <video class="flex" width="765" height="430" src="https://www.dropbox.com/s/nf6jfkwck1glsyo/12%20-%20flex-wrapping-and-columns.mp4?dl=1" loop controls></video>
+    <div class="speed">
+      <div class="speed-bar">1×</div>
+    </div>
+  </div>
+
+<script>
+   const speed = document.querySelector('.speed');
+   const bar = speed.querySelector('.speed-bar');
+   const video = document.querySelector('.flex');
+
+   speed.addEventListener('mousemove', function(e) {
+    //  console.log(e); //MouseEvent {isTrusted: true, screenX: 659, screenY: 272, clientX: 661, clientY: 174…}
+    const y = e.pageY - this.offsetTop;
+    // console.log(y); // gives 1 at top and 408 at bottom
+    const percent = y / this.offsetHeight;
+    // console.log(percent); // gives value like o.002 at top and 0.50456 at middle
+    const min = 0.4; // we set min andd max values ( these are displayed on speed bar)
+    const max = 4;
+    const height = Math.round(percent * 100) + '%'; // now we get 56% 45%
+    // console.log(height);
+    const playbackRate = percent * (max-min) + min;
+    bar.style.height = height;
+    bar.textContent = playbackRate.toFixed(2) + 'x'; // we are making to 2 decimal palces and adding x to last (show on seed bar i.e, 0.40x, 1.23x)
+    // console.log(playbackRate); // 1.4273170731707316
+    video.playbackRate = playbackRate;
+  }); 
+</script>
+</body>
+</html>

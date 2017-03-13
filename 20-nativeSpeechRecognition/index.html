@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--  start local host ,terminal -> (open present program) ->npm install -> npm start -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+</head>
+<body>
+
+  <div class="words" contenteditable>
+  </div>
+
+<script>
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  //speechRecognisation is global variable that lives in the browser and that lives on top of
+  //the window.Now, in chrome that lives at webkit speech recognisation and currently is only
+  //available in firefox. so we here just setting it to speech recognistion
+
+const recognition = new SpeechRecognition();
+recognition.intermResult = true; // as we are speeking we can can see data that is writting as
+//we speaks. if it is not true then we have to stop speeking untill it writes
+
+//we update paragragh as we speak
+// when we stop speeking then new paragraph is created and written
+let p = document.createElement('p');
+const words = document.querySelector('.words');
+words.appendChild(p);
+
+recognition.addEventListener('result', e => {
+  console.log(e.results); // when u open this array we find different data in that first array
+   //has transcript which is word we taked we want to grab that
+  const transcript = Array.from(e.results)
+  .map(result => result[0]) // select first element in array
+  .map(result => result.transcript)
+  .join('') // we want as single big string untill we stop speaking
+
+  p.textContent = transcript;
+  if(e.results[0].isFinal){ // if we stop speaking i.e, gap given while speaking
+    p = document.createElement('p'); // new p is created
+    words.appendChild(p); // appended to old p already created
+  }
+  // if(transcript.includes('get the weather')){   // We can check if word is included or we can link external data
+  //   console.log('checking weather');
+  // }
+  // console.log(transcript);
+});
+
+recognition.addEventListener('end', recognition.start); // if end is reached then recognition should start again for next p
+
+recognition.start();
+
+</script>
+
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+
+    body {
+      background:#ffc600;
+      font-family: 'helvetica neue';
+      font-weight: 200;
+      font-size: 20px;
+    }
+
+    .words {
+      max-width:500px;
+      margin:50px auto;
+      background:white;
+      border-radius:5px;
+      box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+      padding:1rem 2rem 1rem 5rem;
+      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height:3rem;
+    }
+    p {
+      margin: 0 0 3rem;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+      border: 1px solid;
+      border-color: transparent #efe4e4;
+    }
+  </style>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background:mistyrose;
+  }
+
+  .three {
+    background:coral;
+  }
+</style>
+
+<button></button>
+<script>
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+
+  function logText(e){
+    console.log(this.classList.value); // when we click third div ie.coral(orange) it logs one,two ,three because they are wrapped
+    console.log(this); // when we click third div it logs 3 <div>'s'
+
+    //when we click it will ripple all the way up...we are listening on multiple nested elements called bubbling. we click on third div that means we clicked on second div -> first div -> body -> document -> window -> ios
+    // how it works: first when we click any element, first it captures ...body then div ->next div -> next div ie from top to bottom.It doesn't run the event .it just stores i.e captures the event and then it bubbles.From bottom to top and fires the events
+
+    // e.stopPropagation(); //stop bubbling
+    //stopPropagation stops bubbling up and triggers only element that we clicked
+    // o/ps only
+    //three
+    //<div class=​"three">​​</div>​
+
+    //we run stopPropagation when capture: true
+    //it stops capture at first
+    //o/p s
+    // one
+    //<div class=​"one">​…​</div>​
+  }
+
+  divs.forEach(div => div.addEventListener('click', logText,{
+  // capture: true //when we set capture to true then it fires as when we click third div then it
+ //one
+// <div class=​"one">​…​</div>​
+// two
+// <div class=​"two">​…​</div>​
+//three
+//<div class=​"three">​​</div>​
+capture: false, // by default it is false i.e bubble up
+//three
+//<div class=​"three">​​</div>​
+//two
+//<div class=​"two">​…​</div>​
+// one
+//<div class=​"one">​…​</div>​
+
+once: true //once is new in browser
+// listen for click and unbinds itself
+// i.e equal to div.removeEventListener('click',logText);
+//when once: true we can acess only once
+}));
+
+// button.addEventListener('click',() => {
+//   console.log('click!!!');
+// }) // 7 times click!!! // if we click 7 times then it gives click!! 7 times
+
+
+button.addEventListener('click',() => {
+  console.log('click!!!');
+},{
+  once: true
+});
+//regardless of how many times we clicked it gives only once click!!!
+// because we gave third option once: true;
+
+</script>
+</body>
+</html>
